@@ -1,0 +1,12 @@
+{
+  "watchlist": [
+    {
+      "title": "Euphoria",
+      "year": "2019–",
+      "poster": "https://m.media-amazon.com/images/M/MV5BZjVlN2M2N2MtOWViZC00MzIxLTlhZWEtMTIwNDIwMzE3ZWJiXkEyXkFqcGc@._V1_SX300.jpg",
+      "rating": "9",
+      "id": "gQMAeqRqLvs"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
