@@ -1,22 +1,4 @@
 {
-  "watchlist": [
-    {
-      "title": "Kung Fu Panda",
-      "year": "2008",
-      "poster": "https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "",
-      "comment": "",
-      "id": "ySUJGV52wKw"
-    },
-    {
-      "imdbID": "tt8652728",
-      "title": "Waves",
-      "year": "2019",
-      "poster": "https://m.media-amazon.com/images/M/MV5BNmFlNmQyYzctMzE3Ni00NjRkLWFiYzctYmZjMDllZTdkY2VjXkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "6",
-      "comment": "A24 films are really cool",
-      "id": "eLAxn6ZUCNo"
-    }
-  ],
+  "watchlist": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
