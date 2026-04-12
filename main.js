@@ -7,29 +7,27 @@ const searchBtn = document.getElementById("search-btn");
 const resultsContainer = document.getElementById("results-container");
 const watchlistContainer = document.getElementById("watchlist-container");
 
+// ---------------- SEARCH ----------------
 
-//search function
 function search() {
     const query = searchInput.value.trim();
-
-    if(query !== "") {
+    if (query !== "") {
         searchMovies(query);
     }
 }
 
-// search button
 searchBtn.addEventListener("click", search);
 
-//input listener (using enter key to search)
 searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         search();
-        }
+    }
 });
 
-
-// fetching movies
+// fetch movies
 async function searchMovies(query) {
+    resultsContainer.innerHTML = "<p>Loading...</p>";
+
     try {
         const response = await fetch(`https://www.omdbapi.com/?s=${query}&apikey=${API_KEY}`);
         const data = await response.json();
@@ -38,25 +36,29 @@ async function searchMovies(query) {
 
     } catch (error) {
         console.error("Error fetching data:", error);
-        resultsContainer.innerHTML = "<p>Something went wrong. Please try again.</p>";
+        resultsContainer.innerHTML = "<p>Something went wrong.</p>";
     }
 }
 
-// displaying movie results
+// display results
 function displayMovies(movies) {
     resultsContainer.innerHTML = "";
 
     if (!movies) {
-        resultsContainer.innerHTML = "<p>No such movie found. Try different title</p>";
+        resultsContainer.innerHTML = "<p>No movies found.</p>";
         return;
     }
 
     movies.forEach((movie) => {
+        const poster = movie.Poster !== "N/A"
+            ? movie.Poster
+            : "https://via.placeholder.com/300x450?text=No+Image";
+
         const movieCard = document.createElement("div");
         movieCard.classList.add("movie-card");
 
         movieCard.innerHTML = `
-            <img src="${movie.Poster}" alt="poster" />
+            <img src="${poster}" />
             <h3>${movie.Title}</h3>
             <p>${movie.Year}</p>
         `;
@@ -64,9 +66,8 @@ function displayMovies(movies) {
         const addBtn = document.createElement("button");
         addBtn.textContent = "Add to Watchlist";
 
-        addBtn.addEventListener( "click", () => {
+        addBtn.addEventListener("click", () => {
             addToWatchlist(movie);
-
             addBtn.textContent = "Added";
             addBtn.disabled = true;
         });
@@ -76,97 +77,180 @@ function displayMovies(movies) {
     });
 }
 
-// POSTing to watchlist
+// ---------------- WATCHLIST ----------------
+
+// add movie
 async function addToWatchlist(movie) {
+    const res = await fetch("http://localhost:3000/watchlist");
+    const existing = await res.json();
+
+    const alreadyExists = existing.some(item => item.imdbID === movie.imdbID);
+
+    if (alreadyExists) {
+        alert("Movie already in watchlist");
+        return;
+    }
+
     await fetch("http://localhost:3000/watchlist", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            imdbID: movie.imdbID,
             title: movie.Title,
             year: movie.Year,
             poster: movie.Poster,
-            rating: ""
+            rating: "",
+            comment: ""
         })
     });
 
-    loadWatchlist(); 
+    loadWatchlist();
 }
 
-// loading watchlist (GET)
+// load watchlist
 async function loadWatchlist() {
     try {
         const response = await fetch("http://localhost:3000/watchlist");
         const movies = await response.json();
 
-        console.log("Watchlist data:", movies);
-    
         displayWatchlist(movies);
 
     } catch (error) {
         console.error("Error loading watchlist:", error);
     }
-    
 }
 
-//displaying watchlist
+// display watchlist
 function displayWatchlist(movies) {
     watchlistContainer.innerHTML = "";
 
-    movies.forEach ((movie) => {
+    if (movies.length === 0) {
+        watchlistContainer.innerHTML = "<p>Your watchlist is empty</p>";
+        return;
+    }
+
+    movies.forEach((movie) => {
         const card = document.createElement("div");
         card.classList.add("movie-card");
 
-        card.innerHTML = `
-            <img src="${movie.poster}"/>
-            <h3>${movie.title}</h3>
-            <p>${movie.year}</p>
-        `;
-
-        const ratingInput = document.createElement("input");
-        ratingInput.type = "number";
-        ratingInput.placeholder = "Rate (1-10)";
-        ratingInput.value = movie.rating || "" ;
-
-        ratingInput.addEventListener("change", () => {
-            updateRating(movie.id, ratingInput.value);
-        });
-
-        //removing from watchlist
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-
-        deleteBtn.addEventListener("click", () => {
-            deleteMovie(movie.id);
-        });
-
-        card.appendChild(ratingInput);
-        card.appendChild(deleteBtn);
+        renderViewMode(card, movie);
 
         watchlistContainer.appendChild(card);
     });
 }
 
-//delete button function
+// ---------------- VIEW MODE ----------------
+
+function renderViewMode(card, movie) {
+    card.innerHTML = `
+        <img src="${movie.poster}" />
+        <h3>${movie.title}</h3>
+        <p>${movie.year}</p>
+    `;
+
+    const ratingDisplay = document.createElement("p");
+
+    if (movie.rating) {
+        ratingDisplay.textContent = `⭐ ${movie.rating}/10 ${movie.comment ? "— " + movie.comment : ""}`;
+    } else {
+        ratingDisplay.textContent = "No rating yet";
+    }
+
+    const actions = document.createElement("div");
+    actions.classList.add("actions");
+
+    const editBtn = document.createElement("button");
+    editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+
+    editBtn.addEventListener("click", () => {
+        renderEditMode(card, movie);
+    });
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+
+    deleteBtn.addEventListener("click", () => {
+        deleteMovie(movie.id);
+    });
+
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+
+    card.appendChild(ratingDisplay);
+    card.appendChild(actions);
+}
+
+// ---------------- EDIT MODE ----------------
+
+function renderEditMode(card, movie) {
+    card.innerHTML = `
+        <img src="${movie.poster}" />
+        <h3>${movie.title}</h3>
+        <p>${movie.year}</p>
+    `;
+
+    const ratingInput = document.createElement("input");
+    ratingInput.type = "number";
+    ratingInput.placeholder = "Rating (1-10)";
+    ratingInput.value = movie.rating || "";
+
+    const commentInput = document.createElement("input");
+    commentInput.type = "text";
+    commentInput.placeholder = "Comment...";
+    commentInput.value = movie.comment || "";
+
+    const actions = document.createElement("div");
+    actions.classList.add("actions");
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = 'Save';
+
+    saveBtn.addEventListener("click", async () => {
+        await updateMovie(movie.id, ratingInput.value, commentInput.value);
+        loadWatchlist();
+    });
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = 'Cancel';
+
+    cancelBtn.addEventListener("click", () => {
+        renderViewMode(card, movie);
+    });
+
+    actions.appendChild(saveBtn);
+    actions.appendChild(cancelBtn);
+
+    card.appendChild(ratingInput);
+    card.appendChild(commentInput);
+    card.appendChild(actions);
+}
+
+// ---------------- DELETE ----------------
+
 async function deleteMovie(id) {
-    await fetch(`http://localhost:3000/watchlist/${id}` , {
+    await fetch(`http://localhost:3000/watchlist/${id}`, {
         method: "DELETE"
     });
 
     loadWatchlist();
 }
 
-//ratings update (PATCH)
-async function updateRating(id, rating) {
+// ---------------- UPDATE ----------------
+
+async function updateMovie(id, rating, comment) {
     await fetch(`http://localhost:3000/watchlist/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ rating: rating })
+        body: JSON.stringify({
+            rating: rating,
+            comment: comment
+        })
     });
 }
 
-
+// initial load
 loadWatchlist();

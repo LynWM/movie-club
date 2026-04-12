@@ -1,46 +1,21 @@
 {
   "watchlist": [
     {
-      "title": "Euphoria",
-      "year": "2019–",
-      "poster": "https://m.media-amazon.com/images/M/MV5BZjVlN2M2N2MtOWViZC00MzIxLTlhZWEtMTIwNDIwMzE3ZWJiXkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "10",
-      "id": "gQMAeqRqLvs"
-    },
-    {
-      "title": "Bet",
-      "year": "2025–",
-      "poster": "https://m.media-amazon.com/images/M/MV5BZWFkNjVkMTAtNjAwZS00YmZmLWEzY2ItMjc0MGEwNmFhMzk3XkEyXkFqcGc@._V1_SX300.jpg",
+      "title": "Kung Fu Panda",
+      "year": "2008",
+      "poster": "https://m.media-amazon.com/images/M/MV5BZDU5MDNiMGItYjVmZi00NDUxLTg2OTktNGE0NzNlNzM4NzgyXkEyXkFqcGc@._V1_SX300.jpg",
       "rating": "",
-      "id": "a720RT95aNw"
+      "comment": "",
+      "id": "ySUJGV52wKw"
     },
     {
-      "title": "The Vampire Diaries",
-      "year": "2009–2017",
-      "poster": "https://m.media-amazon.com/images/M/MV5BMmNjOWQzYmYtNGYxOS00MjVkLTg1MWUtMTkzMGE0MDgwNzQ5XkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "",
-      "id": "mXwCP9KXBtI"
-    },
-    {
+      "imdbID": "tt8652728",
       "title": "Waves",
       "year": "2019",
       "poster": "https://m.media-amazon.com/images/M/MV5BNmFlNmQyYzctMzE3Ni00NjRkLWFiYzctYmZjMDllZTdkY2VjXkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "",
-      "id": "G6weEdrCW54"
-    },
-    {
-      "title": "Entergalactic",
-      "year": "2022",
-      "poster": "https://m.media-amazon.com/images/M/MV5BM2JlYzU3OTQtM2FmYy00OGZiLTllM2YtMjUwZGY0NmUzODE3XkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "",
-      "id": "oXZo0YS5wBk"
-    },
-    {
-      "title": "Thirteen",
-      "year": "2003",
-      "poster": "https://m.media-amazon.com/images/M/MV5BOWVlOWU0NjgtOGY3Yi00MTI2LWEyNDgtNmJlNDRiM2Y2MzFhXkEyXkFqcGc@._V1_SX300.jpg",
-      "rating": "",
-      "id": "um6dS55_YSs"
+      "rating": "6",
+      "comment": "A24 films are really cool",
+      "id": "eLAxn6ZUCNo"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -218,6 +218,22 @@ nav ul li a:hover {
     border-style: none;
 }
 
+#watchlist-container .movie-card button {
+    background: white;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0.3rem;
+}
+
+#watchlist-container .movie-card button:hover {
+    background-color: #390007;
+}
+
+#watchlist-container .actions {
+    display: flex;
+}
+
 footer {
     background-color: #390007;
     color: white;
@@ -231,13 +247,13 @@ footer {
 footer h3 {
     padding: 1.2rem;
     font-size: 1.6rem;
+    text-decoration: underline;
 }
 
 footer i {
     display: flex;
-    justify-content: space-between;
-    font-size: 40px;
-    gap: 30px;
+    justify-content: space-around;
+    font-size: 50px;
     margin: 8px;
     
 }
