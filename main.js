@@ -70,7 +70,7 @@ function displayMovies(movies) {
     movies.forEach((movie) => {
         const poster = movie.Poster !== "N/A"
             ? movie.Poster
-            : "https://placehold.co/300x450";
+            : "assets/placeholder.png";
 
         const movieCard = document.createElement("div");
         movieCard.classList.add("movie-card");
