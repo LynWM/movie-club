@@ -6,9 +6,10 @@ const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const resultsContainer = document.getElementById("results-container");
 const watchlistContainer = document.getElementById("watchlist-container");
+const clearBtn = document.getElementById("clear-btn");
 
-// ---------------- SEARCH ----------------
 
+// search functionality
 function search() {
     const query = searchInput.value.trim();
     if (query !== "") {
@@ -16,13 +17,30 @@ function search() {
     }
 }
 
+//search button + search()
 searchBtn.addEventListener("click", search);
 
+// search using enter button
 searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
         search();
     }
 });
+
+//clear input button
+searchInput.addEventListener("input", () => {
+    if (searchInput.value.trim() !== "") {
+        clearBtn.style.display = "block";
+    } else {
+        clearBtn.style.display = "none";
+    }
+})
+
+clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    resultsContainer.innerHTML = "";
+    clearBtn.style.display = "none";
+})
 
 // fetch movies
 async function searchMovies(query) {
@@ -52,7 +70,7 @@ function displayMovies(movies) {
     movies.forEach((movie) => {
         const poster = movie.Poster !== "N/A"
             ? movie.Poster
-            : "https://via.placeholder.com/300x450?text=No+Image";
+            : "https://placehold.co/300x450";
 
         const movieCard = document.createElement("div");
         movieCard.classList.add("movie-card");
@@ -77,17 +95,15 @@ function displayMovies(movies) {
     });
 }
 
-// ---------------- WATCHLIST ----------------
-
-// add movie
+// adding movie to watchlist
 async function addToWatchlist(movie) {
-    const res = await fetch("http://localhost:3000/watchlist");
-    const existing = await res.json();
+    const result = await fetch("http://localhost:3000/watchlist");
+    const existing = await result.json();
 
     const alreadyExists = existing.some(item => item.imdbID === movie.imdbID);
 
     if (alreadyExists) {
-        alert("Movie already in watchlist");
+        alert("This movie is already in your watchlist");
         return;
     }
 
@@ -141,8 +157,7 @@ function displayWatchlist(movies) {
     });
 }
 
-// ---------------- VIEW MODE ----------------
-
+// rendering watchlist
 function renderViewMode(card, movie) {
     card.innerHTML = `
         <img src="${movie.poster}" />
@@ -153,7 +168,7 @@ function renderViewMode(card, movie) {
     const ratingDisplay = document.createElement("p");
 
     if (movie.rating) {
-        ratingDisplay.textContent = `⭐ ${movie.rating}/10 ${movie.comment ? "— " + movie.comment : ""}`;
+        ratingDisplay.textContent = `${movie.rating}/10 ${movie.comment ? "— " + movie.comment : ""}`;
     } else {
         ratingDisplay.textContent = "No rating yet";
     }
@@ -182,8 +197,7 @@ function renderViewMode(card, movie) {
     card.appendChild(actions);
 }
 
-// ---------------- EDIT MODE ----------------
-
+// editing watchlist
 function renderEditMode(card, movie) {
     card.innerHTML = `
         <img src="${movie.poster}" />
@@ -227,8 +241,7 @@ function renderEditMode(card, movie) {
     card.appendChild(actions);
 }
 
-// ---------------- DELETE ----------------
-
+// deleting from watchlist
 async function deleteMovie(id) {
     await fetch(`http://localhost:3000/watchlist/${id}`, {
         method: "DELETE"
@@ -237,8 +250,7 @@ async function deleteMovie(id) {
     loadWatchlist();
 }
 
-// ---------------- UPDATE ----------------
-
+// updating watchlist
 async function updateMovie(id, rating, comment) {
     await fetch(`http://localhost:3000/watchlist/${id}`, {
         method: "PATCH",
