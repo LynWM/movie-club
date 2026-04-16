@@ -20,7 +20,7 @@ section {
     scroll-margin-top: 11vh;
 }
 
-/* Nav styling */
+/* Nav section */
 
 nav {
     background-color: #390007;
@@ -147,6 +147,7 @@ nav ul li a:hover {
 .meeting-info i {
     padding: 0.2rem;
 }
+
  /* Search section */
 
 #search {
@@ -271,7 +272,7 @@ nav ul li a:hover {
     color: white;
 }
 
-/* Watchlist styling */
+/* Watchlist section */
 #watchlist {
    background: linear-gradient(to bottom,#0e0e0f, #141416) ;
     display: flex;
@@ -315,6 +316,7 @@ nav ul li a:hover {
     display: flex;
 }
 
+/* Footer section */
 footer {
     background-color: #390007;
     color: white;
